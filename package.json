@@ -1,6 +1,6 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "Task-Management-App-Svelte-Sapper",
+  "description": "Task Management App Svelte Sapper",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
