@@ -1,18 +1,18 @@
 <script>
-  export let type
-  export let name
-  export let placeholder
-  export let label
-  export let value
-  export let error
-  export let onChange
+  export let type;
+  export let name;
+  export let placeholder;
+  export let label;
+  export let value;
+  export let error;
+  export let onChange;
 
-  let localValue = ''
+  let isTouched = false;
 
   const onChangeValue = event => {
-    const { value, name } = event.target
-    onChange({ value, name })
-  }
+    const { value, name } = event.target;
+    onChange({ value, name });
+  };
 </script>
 
 <style>
@@ -61,18 +61,18 @@
 
 <div class="shared-input-container">
   {#if label}
-    <label class:input-error-text={error}>{label}</label>
+    <label class:input-error-text={error && isTouched}>{label}</label>
   {/if}
 
   <input
-    class:input-error-border={error}
+    class:input-error-border={error && isTouched}
     {name}
     {type}
     {value}
     {placeholder}
-    on:change={onChangeValue} />
-
-  {#if error}
+    on:input={onChangeValue}
+    on:blur={() => (isTouched = true)} />
+  {#if error && isTouched}
     <div class="error input-error-text">{error}</div>
   {/if}
 </div>
