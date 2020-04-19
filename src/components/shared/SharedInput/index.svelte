@@ -54,7 +54,7 @@
   }
 
   .shared-input-container .error {
-    font-size: 12px;
+    font-size: 10px;
     text-align: right;
   }
 </style>
