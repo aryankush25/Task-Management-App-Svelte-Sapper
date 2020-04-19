@@ -4,10 +4,25 @@
   import SharedCheckbox from "../components/shared/SharedCheckbox";
   import SharedButton from "../components/shared/SharedButton";
 
+  import {
+    nameValidator,
+    emailValidator,
+    passwordValidator,
+    confirmPasswordValidator
+  } from "../utils/validators.js";
+
   let name = "";
   let email = "";
   let password = "";
   let confirmPassword = "";
+
+  $: validatorName = nameValidator(name);
+  $: validatorEmail = emailValidator(email);
+  $: validatorPassword = passwordValidator(password);
+  $: validatorConfirmPassword = confirmPasswordValidator(
+    password,
+    confirmPassword
+  );
 
   const onChangeName = event => {
     const { value } = event;
@@ -35,6 +50,12 @@
     console.log("$$$$ password", password);
     console.log("$$$$ confirmPassword", confirmPassword);
   };
+
+  $: isValidFormData =
+    validatorName.isValid &&
+    validatorEmail.isValid &&
+    validatorPassword.isValid &&
+    validatorConfirmPassword.isValid;
 </script>
 
 <style>
@@ -68,7 +89,7 @@
       value={name}
       onChange={onChangeName}
       placeholder="Your Name"
-      error="" />
+      error={validatorName.errorMessage} />
 
     <SharedInput
       type="text"
@@ -77,7 +98,7 @@
       value={email}
       onChange={onChangeEmail}
       placeholder="Enter Email"
-      error="" />
+      error={validatorEmail.errorMessage} />
 
     <SharedInput
       type="password"
@@ -86,7 +107,7 @@
       value={password}
       onChange={onChangePassword}
       placeholder="Enter Password"
-      error="" />
+      error={validatorPassword.errorMessage} />
 
     <SharedInput
       type="password"
@@ -95,12 +116,13 @@
       value={confirmPassword}
       onChange={onChangeConfirmPassword}
       placeholder="Confirm Password"
-      error="" />
+      error={validatorConfirmPassword.errorMessage} />
 
     <div class="register-button">
       <SharedButton
         label="Register"
         name="login-button"
+        disabled={!isValidFormData}
         onClick={handleOnSubmit} />
     </div>
   </form>
