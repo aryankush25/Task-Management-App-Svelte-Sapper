@@ -1,3 +1,7 @@
+<script>
+  import LoginSignUpPageContainer from '../containers/LoginSignUpPageContainer'
+</script>
+
 <style>
 
 </style>
@@ -6,4 +10,4 @@
   <title>Task Management App - Login</title>
 </svelte:head>
 
-<h1>Hello this is Task Management App!</h1>
+<LoginSignUpPageContainer />
