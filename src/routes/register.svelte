@@ -4,9 +4,15 @@
   import SharedCheckbox from "../components/shared/SharedCheckbox";
   import SharedButton from "../components/shared/SharedButton";
 
-  let checked = false;
+  let name = "";
   let email = "";
   let password = "";
+  let confirmPassword = "";
+
+  const onChangeName = event => {
+    const { value } = event;
+    name = value;
+  };
 
   const onChangeEmail = event => {
     const { value } = event;
@@ -18,10 +24,16 @@
     password = value;
   };
 
+  const onChangeConfirmPassword = event => {
+    const { value } = event;
+    confirmPassword = value;
+  };
+
   const handleOnSubmit = () => {
+    console.log("$$$$ name", name);
     console.log("$$$$ email", email);
     console.log("$$$$ password", password);
-    console.log("$$$$ checked", checked);
+    console.log("$$$$ confirmPassword", confirmPassword);
   };
 </script>
 
@@ -31,19 +43,32 @@
     font-weight: bold;
     margin-bottom: 40px;
   }
+
+  .register-button {
+    padding-top: 20px;
+  }
 </style>
 
 <svelte:head>
   <title>Task Management App - Login</title>
 </svelte:head>
 
-<LoginSignUpPageContainer reverse={false}>
-  <img slot="image" src={'/images/signin-image.jpg'} alt="login-image" />
+<LoginSignUpPageContainer reverse={true}>
+  <img slot="image" src={'/images/signup-image.jpg'} alt="register-image" />
 
-  <a slot="change-link" href="/register">Create an account</a>
+  <a slot="change-link" href="/login">I am already member</a>
 
   <form slot="main-form" on:submit|preventDefault>
-    <div class="form-heading">Sign in</div>
+    <div class="form-heading">Sign up</div>
+
+    <SharedInput
+      type="text"
+      name="name"
+      label="Name"
+      value={name}
+      onChange={onChangeName}
+      placeholder="Your Name"
+      error="" />
 
     <SharedInput
       type="text"
@@ -52,7 +77,7 @@
       value={email}
       onChange={onChangeEmail}
       placeholder="Enter Email"
-      error="Not a valid email" />
+      error="" />
 
     <SharedInput
       type="password"
@@ -61,10 +86,22 @@
       value={password}
       onChange={onChangePassword}
       placeholder="Enter Password"
-      error="Must be greater than 8 characters" />
+      error="" />
 
-    <SharedCheckbox name="rememberMe" bind:checked label="Remember me" />
+    <SharedInput
+      type="password"
+      name="confirmPassword"
+      label="Confirm Password"
+      value={confirmPassword}
+      onChange={onChangeConfirmPassword}
+      placeholder="Confirm Password"
+      error="" />
 
-    <SharedButton label="Log in" name="login-button" onClick={handleOnSubmit} />
+    <div class="register-button">
+      <SharedButton
+        label="Register"
+        name="login-button"
+        onClick={handleOnSubmit} />
+    </div>
   </form>
 </LoginSignUpPageContainer>
