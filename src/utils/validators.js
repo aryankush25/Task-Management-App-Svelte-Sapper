@@ -22,7 +22,7 @@ export const emailValidator = (email) => {
 
 export const passwordValidator = (password) => {
   const isValid = validator.isLength(password, { min: 8 })
-  const errorMessage = isValid ? '' : 'Password must be greater than 8 letters'
+  const errorMessage = isValid ? '' : 'Password must be at least 8 characters'
 
   return {
     isValid,
