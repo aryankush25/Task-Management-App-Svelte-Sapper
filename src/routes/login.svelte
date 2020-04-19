@@ -4,9 +4,14 @@
   import SharedCheckbox from "../components/shared/SharedCheckbox";
   import SharedButton from "../components/shared/SharedButton";
 
-  let checked = false;
+  import { emailValidator, passwordValidator } from "../utils/validators.js";
+
+  let rememberMe = false;
   let email = "";
   let password = "";
+
+  $: validatorEmail = emailValidator(email);
+  $: validatorPassword = passwordValidator(password);
 
   const onChangeEmail = event => {
     const { value } = event;
@@ -21,8 +26,10 @@
   const handleOnSubmit = () => {
     console.log("$$$$ email", email);
     console.log("$$$$ password", password);
-    console.log("$$$$ checked", checked);
+    console.log("$$$$ rememberMe", rememberMe);
   };
+
+  $: isValidFormData = validatorEmail.isValid && validatorPassword.isValid;
 </script>
 
 <style>
@@ -52,7 +59,7 @@
       value={email}
       onChange={onChangeEmail}
       placeholder="Enter Email"
-      error="Not a valid email" />
+      error={validatorEmail.errorMessage} />
 
     <SharedInput
       type="password"
@@ -61,10 +68,17 @@
       value={password}
       onChange={onChangePassword}
       placeholder="Enter Password"
-      error="Must be greater than 8 characters" />
+      error={validatorPassword.errorMessage} />
 
-    <SharedCheckbox name="rememberMe" bind:checked label="Remember me" />
+    <SharedCheckbox
+      name="rememberMe"
+      bind:checked={rememberMe}
+      label="Remember me" />
 
-    <SharedButton label="Log in" name="login-button" onClick={handleOnSubmit} />
+    <SharedButton
+      label="Log in"
+      name="login-button"
+      disabled={!isValidFormData}
+      onClick={handleOnSubmit} />
   </form>
 </LoginSignUpPageContainer>
