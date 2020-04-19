@@ -1,27 +1,5 @@
 <script>
-  import SharedInput from '../../components/shared/SharedInput'
-  import SharedCheckbox from '../../components/shared/SharedCheckbox'
-  import SharedButton from '../../components/shared/SharedButton'
-
-  let checked = false
-  let email = ''
-  let password = ''
-
-  const onChangeEmail = event => {
-    const { value } = event
-    email = value
-  }
-
-  const onChangePassword = event => {
-    const { value } = event
-    password = value
-  }
-
-  const handleOnSubmit = () => {
-    console.log('$$$$ email', email)
-    console.log('$$$$ password', password)
-    console.log('$$$$ checked', checked)
-  }
+  export let reverse;
 </script>
 
 <style>
@@ -63,47 +41,24 @@
     margin-bottom: 50px;
   }
 
-  .form-heading {
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 40px;
+  .reverse {
+    flex-direction: row-reverse;
   }
 </style>
 
 <div class="page-container">
-  <div class="form-container">
+  <div class="form-container" class:reverse>
     <div class="image-container">
       <div class="image-wrapper">
-        <img src={'/images/signin-image.jpg'} alt="sign-in-image" />
+        <slot name="image" />
       </div>
-      <a href="/signup">Create an account</a>
+
+      <slot name="change-link" />
     </div>
 
     <div class="form-wrapper">
-      <form on:submit|preventDefault>
-        <div class="form-heading">Sign in</div>
-        <SharedInput
-          type="text"
-          name="email"
-          label="Email"
-          value={email}
-          onChange={onChangeEmail}
-          placeholder="Enter Email"
-          error="Not a valid email" />
-        <SharedInput
-          type="password"
-          name="password"
-          label="Password"
-          value={password}
-          onChange={onChangePassword}
-          placeholder="Enter Password"
-          error="Must be greater than 8 characters" />
-        <SharedCheckbox name="rememberMe" bind:checked label="Remember me" />
-        <SharedButton
-          label="Log in"
-          name="login-button"
-          onClick={handleOnSubmit} />
-      </form>
+      <slot name="main-form" />
     </div>
   </div>
+  <slot />
 </div>
