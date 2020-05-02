@@ -1,12 +1,18 @@
 import * as R from 'ramda'
+import { getLocalStorageTokens } from '../utils/helper'
+import { isNilOrEmpty } from '../../utils/helper'
 
 const BASE_URL = 'https://shielded-anchorage-68629.herokuapp.com/'
 
-const request = async (url, method, header, body) => {
+const request = async (url, method, header, body, noAuth) => {
   var myHeaders = new Headers()
   const headerKeys = R.keys(header)
 
   myHeaders.append('Accept', '*/*')
+  if (isNilOrEmpty(noAuth)) {
+    const token = getLocalStorageTokens()
+    myHeaders.append('Authorization', `Bearer ${token}`)
+  }
 
   headerKeys.forEach((headerKey) => {
     myHeaders.append(headerKey, header[headerKey])

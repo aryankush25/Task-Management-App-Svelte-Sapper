@@ -1,5 +1,7 @@
 import * as R from 'ramda'
 import request from '../request'
+import { isPresent } from '../../utils/helper'
+import { setLocalStorageTokens } from '../utils/helper'
 
 const loginUserApi = async (email, password) => {
   const url = 'users/login'
@@ -12,10 +14,17 @@ const loginUserApi = async (email, password) => {
     {
       email: email,
       password: password,
-    }
+    },
+    true
   )
 
-  console.log('response', response)
+  const token = R.pathOr('', ['data', 'token'], response)
+
+  if (response.success && isPresent(token)) {
+    setLocalStorageTokens({
+      accessToken: token,
+    })
+  }
 
   return response
 }
