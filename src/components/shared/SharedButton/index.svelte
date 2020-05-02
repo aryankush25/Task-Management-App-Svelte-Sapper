@@ -1,8 +1,11 @@
 <script>
   export let name;
   export let label;
-  export let disabled;
+  export let isDisabled;
+  export let isLoading;
   export let onClick;
+
+  $: disabled = isDisabled || isLoading
 </script>
 
 <style>
@@ -11,19 +14,36 @@
     background: #6dabe4;
     color: #fff;
     border-bottom: none;
-    width: auto;
     padding: 15px 39px;
     border-radius: 5px;
     cursor: pointer;
     outline: none;
+    font-size: 14px;
+    width: 100%;
+    position: relative;
   }
 
   .disabled {
     cursor: not-allowed !important;
     background: #6dabac !important;
   }
+  
+  .shared-button-container button i {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+  }
 </style>
 
+<svelte:head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</svelte:head>
+
 <div class="shared-button-container">
-  <button class:disabled {name} {disabled} on:click={onClick}>{label}</button>
+  <button class:disabled {name} {disabled} on:click={onClick}>
+    {#if isLoading}
+      <i class="fa fa-spinner fa-spin"></i>
+    {/if}
+    {label}
+  </button>
 </div>

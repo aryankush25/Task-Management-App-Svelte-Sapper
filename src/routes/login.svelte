@@ -3,12 +3,14 @@
   import SharedInput from "../components/shared/SharedInput";
   import SharedCheckbox from "../components/shared/SharedCheckbox";
   import SharedButton from "../components/shared/SharedButton";
+  import { loginUser } from '../services'
 
   import { emailValidator, passwordValidator } from "../utils/validators.js";
 
   let rememberMe = false;
   let email = "";
   let password = "";
+  let isLoading = false;
 
   $: validatorEmail = emailValidator(email);
   $: validatorPassword = passwordValidator(password);
@@ -23,10 +25,12 @@
     password = value;
   };
 
-  const handleOnSubmit = () => {
-    console.log("$$$$ email", email);
-    console.log("$$$$ password", password);
-    console.log("$$$$ rememberMe", rememberMe);
+  const handleOnSubmit = async () => {
+    isLoading = true
+
+    const response = await loginUser(email, password)
+
+    isLoading = false
   };
 
   $: isValidFormData = validatorEmail.isValid && validatorPassword.isValid;
@@ -78,7 +82,8 @@
     <SharedButton
       label="Log in"
       name="login-button"
-      disabled={!isValidFormData}
+      isDisabled={!isValidFormData}
+      isLoading={isLoading}
       onClick={handleOnSubmit} />
   </form>
 </LoginSignUpPageContainer>

@@ -122,7 +122,7 @@
       <SharedButton
         label="Register"
         name="login-button"
-        disabled={!isValidFormData}
+        isDisabled={!isValidFormData}
         onClick={handleOnSubmit} />
     </div>
   </form>
