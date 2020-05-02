@@ -3,7 +3,7 @@
   import SharedInput from "../components/shared/SharedInput";
   import SharedCheckbox from "../components/shared/SharedCheckbox";
   import SharedButton from "../components/shared/SharedButton";
-  import { loginUser } from '../services'
+  import api from '../services'
 
   import { emailValidator, passwordValidator } from "../utils/validators.js";
 
@@ -28,7 +28,7 @@
   const handleOnSubmit = async () => {
     isLoading = true
 
-    const response = await loginUser(email, password)
+    const response = await api.userApis.loginUserApi(email, password)
 
     isLoading = false
   };
