@@ -5,7 +5,7 @@
   export let isLoading;
   export let onClick;
 
-  $: disabled = isDisabled || isLoading
+  $: disabled = isDisabled || isLoading;
 </script>
 
 <style>
@@ -27,7 +27,7 @@
     cursor: not-allowed !important;
     background: #6dabac !important;
   }
-  
+
   .shared-button-container button i {
     position: absolute;
     right: 5px;
@@ -36,13 +36,15 @@
 </style>
 
 <svelte:head>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 </svelte:head>
 
 <div class="shared-button-container">
   <button class:disabled {name} {disabled} on:click={onClick}>
     {#if isLoading}
-      <i class="fa fa-spinner fa-spin"></i>
+      <i class="fa fa-spinner fa-spin" />
     {/if}
     {label}
   </button>

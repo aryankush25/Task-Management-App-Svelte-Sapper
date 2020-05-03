@@ -1,7 +1,7 @@
 <script>
-  export let checked
-  export let name
-  export let label
+  export let checked;
+  export let name;
+  export let label;
 </script>
 
 <style>

@@ -1,11 +1,11 @@
 <script>
-  import { goto } from '@sapper/app';
+  import { goto } from "@sapper/app";
 
   import LoginSignUpPageContainer from "../containers/LoginSignUpPageContainer";
   import SharedInput from "../components/shared/SharedInput";
   import SharedCheckbox from "../components/shared/SharedCheckbox";
   import SharedButton from "../components/shared/SharedButton";
-  import api from '../services'
+  import api from "../services";
 
   import {
     nameValidator,
@@ -49,15 +49,14 @@
   };
 
   const handleOnSubmit = async () => {
-    isLoading = true
-    const response = await api.userApis.registerUserApi(name,email, password)
-    isLoading = false
+    isLoading = true;
+    const response = await api.userApis.registerUserApi(name, email, password);
+    isLoading = false;
 
     if (response.success) {
-      goto('/');
+      goto("/");
     }
   };
-
 
   $: isValidFormData =
     validatorName.isValid &&
@@ -131,7 +130,7 @@
         label="Register"
         name="login-button"
         isDisabled={!isValidFormData}
-        isLoading={isLoading}
+        {isLoading}
         onClick={handleOnSubmit} />
     </div>
   </form>

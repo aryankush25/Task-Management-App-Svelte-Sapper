@@ -5,58 +5,58 @@ import { isNilOrEmpty } from '../../utils/helper'
 const BASE_URL = 'https://shielded-anchorage-68629.herokuapp.com/'
 
 const request = async (url, method, header, body, noAuth) => {
-  var myHeaders = new Headers()
-  const headerKeys = R.keys(header)
+	var myHeaders = new Headers()
+	const headerKeys = R.keys(header)
 
-  myHeaders.append('Accept', '*/*')
-  if (isNilOrEmpty(noAuth)) {
-    const token = getLocalStorageTokens()
-    myHeaders.append('Authorization', `Bearer ${token}`)
-  }
+	myHeaders.append('Accept', '*/*')
+	if (isNilOrEmpty(noAuth)) {
+		const token = getLocalStorageTokens()
+		myHeaders.append('Authorization', `Bearer ${token}`)
+	}
 
-  headerKeys.forEach((headerKey) => {
-    myHeaders.append(headerKey, header[headerKey])
-  })
+	headerKeys.forEach((headerKey) => {
+		myHeaders.append(headerKey, header[headerKey])
+	})
 
-  var raw = JSON.stringify(body)
+	var raw = JSON.stringify(body)
 
-  var requestOptions = {
-    method: method,
-    headers: myHeaders,
-    body: raw,
-  }
+	var requestOptions = {
+		method: method,
+		headers: myHeaders,
+		body: raw
+	}
 
-  const response = fetch(BASE_URL + url, requestOptions)
-    .then((response) => {
-      console.info(`Response of ${url}`, response)
+	const response = fetch(BASE_URL + url, requestOptions)
+		.then((response) => {
+			console.info(`Response of ${url}`, response)
 
-      if (response.ok) {
-        return response.json()
-      }
+			if (response.ok) {
+				return response.json()
+			}
 
-      throw new Error({
-        status: response.status,
-        statusText: response.statusText,
-      })
-    })
-    .then((result) => {
-      console.info(`Result of ${url}`, result)
+			throw new Error({
+				status: response.status,
+				statusText: response.statusText
+			})
+		})
+		.then((result) => {
+			console.info(`Result of ${url}`, result)
 
-      return {
-        success: true,
-        data: result,
-      }
-    })
-    .catch((error) => {
-      console.error(`Error of ${url}`, error)
+			return {
+				success: true,
+				data: result
+			}
+		})
+		.catch((error) => {
+			console.error(`Error of ${url}`, error)
 
-      return {
-        success: false,
-        error: error,
-      }
-    })
+			return {
+				success: false,
+				error: error
+			}
+		})
 
-  return response
+	return response
 }
 
 export default request
