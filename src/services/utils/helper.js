@@ -12,21 +12,18 @@ export const setLocalStorageTokens = (tokens) => {
 
 export const getLocalStorageTokens = () => {
   const accessToken = window.localStorage.getItem('accessToken') || ''
-  const refreshToken = window.localStorage.getItem('refreshToken') || ''
 
   return {
     accessToken,
-    refreshToken,
   }
 }
 
 export const isTokensPresentLocalStorage = () => {
-  const { accessToken, refreshToken } = getLocalStorageTokens()
+  const { accessToken } = getLocalStorageTokens()
 
-  const isTokensUndefined =
-    accessToken === 'undefined' || refreshToken === 'undefined'
+  const isTokensUndefined = accessToken === 'undefined'
 
-  return isPresent(accessToken) && isPresent(refreshToken) && !isTokensUndefined
+  return isPresent(accessToken) && !isTokensUndefined
 }
 
 export const clearLocalStorage = () => {
