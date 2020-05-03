@@ -1,4 +1,6 @@
 <script>
+  import { goto } from '@sapper/app';
+
   import LoginSignUpPageContainer from "../containers/LoginSignUpPageContainer";
   import SharedInput from "../components/shared/SharedInput";
   import SharedCheckbox from "../components/shared/SharedCheckbox";
@@ -48,10 +50,12 @@
 
   const handleOnSubmit = async () => {
     isLoading = true
-
     const response = await api.userApis.registerUserApi(name,email, password)
-
     isLoading = false
+
+    if (response.success) {
+      goto('/');
+    }
   };
 
 
