@@ -29,8 +29,36 @@ const loginUserApi = async (email, password) => {
   return response
 }
 
+const registerUserApi = async (name, email, password) => {
+  const url = 'users'
+  const method = 'POST'
+
+  const response = await request(
+    url,
+    method,
+    { 'Content-Type': 'application/json' },
+    {
+      name: name,
+      email: email,
+      password: password,
+    },
+    true
+  )
+
+  const token = R.pathOr('', ['data', 'token'], response)
+
+  if (response.success && isPresent(token)) {
+    setLocalStorageTokens({
+      accessToken: token,
+    })
+  }
+
+  return response
+}
+
 const userApis = {
   loginUserApi,
+  registerUserApi,
 }
 
 export default userApis

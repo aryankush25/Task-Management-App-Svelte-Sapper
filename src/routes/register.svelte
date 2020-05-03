@@ -3,6 +3,7 @@
   import SharedInput from "../components/shared/SharedInput";
   import SharedCheckbox from "../components/shared/SharedCheckbox";
   import SharedButton from "../components/shared/SharedButton";
+  import api from '../services'
 
   import {
     nameValidator,
@@ -15,6 +16,7 @@
   let email = "";
   let password = "";
   let confirmPassword = "";
+  let isLoading = false;
 
   $: validatorName = nameValidator(name);
   $: validatorEmail = emailValidator(email);
@@ -44,12 +46,14 @@
     confirmPassword = value;
   };
 
-  const handleOnSubmit = () => {
-    console.log("$$$$ name", name);
-    console.log("$$$$ email", email);
-    console.log("$$$$ password", password);
-    console.log("$$$$ confirmPassword", confirmPassword);
+  const handleOnSubmit = async () => {
+    isLoading = true
+
+    const response = await api.userApis.registerUserApi(name,email, password)
+
+    isLoading = false
   };
+
 
   $: isValidFormData =
     validatorName.isValid &&
@@ -123,6 +127,7 @@
         label="Register"
         name="login-button"
         isDisabled={!isValidFormData}
+        isLoading={isLoading}
         onClick={handleOnSubmit} />
     </div>
   </form>
