@@ -1,18 +1,12 @@
-<script context="module">
-  export async function preload(page) {
-    return { page };
-  }
-</script>
-
 <script>
   import * as R from "ramda";
   import { unProtectedRoutes } from "../utils/helper.js";
   import { isTokensPresentLocalStorage } from "../services/utils/helper.js";
   import { goto } from "@sapper/app";
 
-  export let page;
+  export let segment;
 
-  $: path = page.path;
+  $: path = segment ? `/${segment}` : "/";
 
   const fetchAuthGuard = async route => {
     const isLoggedIn = isTokensPresentLocalStorage();
