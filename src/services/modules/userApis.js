@@ -56,9 +56,19 @@ const registerUserApi = async (name, email, password) => {
 	return response
 }
 
+const getCurrentUserApi = async () => {
+	const url = 'users/me'
+	const method = 'GET'
+
+	const response = await request(url, method, { 'Content-Type': 'application/json' })
+
+	return response
+}
+
 const userApis = {
 	loginUserApi,
-	registerUserApi
+	registerUserApi,
+	getCurrentUserApi
 }
 
 export default userApis
