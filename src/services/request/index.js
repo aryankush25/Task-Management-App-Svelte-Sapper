@@ -9,9 +9,11 @@ const request = async (url, method, header, body, noAuth) => {
 	const headerKeys = R.keys(header)
 
 	myHeaders.append('Accept', '*/*')
+
 	if (isNilOrEmpty(noAuth)) {
-		const token = getLocalStorageTokens()
-		myHeaders.append('Authorization', `Bearer ${token}`)
+		const { accessToken } = getLocalStorageTokens()
+
+		myHeaders.append('Authorization', `Bearer ${accessToken}`)
 	}
 
 	headerKeys.forEach((headerKey) => {
