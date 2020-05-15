@@ -88,6 +88,6 @@
       name="login-button"
       isDisabled={!isValidFormData}
       {isLoading}
-      onClick={handleOnSubmit} />
+      on:click={handleOnSubmit} />
   </form>
 </LoginSignUpPageContainer>

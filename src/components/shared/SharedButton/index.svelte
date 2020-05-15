@@ -3,7 +3,6 @@
   export let label;
   export let isDisabled;
   export let isLoading;
-  export let onClick;
 
   $: disabled = isDisabled || isLoading;
 </script>
@@ -42,7 +41,7 @@
 </svelte:head>
 
 <div class="shared-button-container">
-  <button class:disabled {name} {disabled} on:click={onClick}>
+  <button class:disabled {name} {disabled} on:click>
     {#if isLoading}
       <i class="fa fa-spinner fa-spin" />
     {/if}

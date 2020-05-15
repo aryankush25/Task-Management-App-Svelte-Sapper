@@ -30,7 +30,7 @@ const request = async (url, method, header, body, noAuth) => {
 
 	const response = fetch(BASE_URL + url, requestOptions)
 		.then((response) => {
-			console.info(`Response of ${url}`, response)
+			// console.info(`Response of ${url}`, response)
 
 			if (response.ok) {
 				return response.json()
@@ -42,7 +42,7 @@ const request = async (url, method, header, body, noAuth) => {
 			})
 		})
 		.then((result) => {
-			console.info(`Result of ${url}`, result)
+			// console.info(`Result of ${url}`, result)
 
 			return {
 				success: true,
@@ -50,7 +50,7 @@ const request = async (url, method, header, body, noAuth) => {
 			}
 		})
 		.catch((error) => {
-			console.error(`Error of ${url}`, error)
+			// console.error(`Error of ${url}`, error)
 
 			return {
 				success: false,

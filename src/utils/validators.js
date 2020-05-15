@@ -1,5 +1,15 @@
 import validator from 'validator'
 
+export const emptyValidator = (value) => {
+	const isValid = validator.isLength(value, { min: 1 })
+	const errorMessage = isValid ? '' : 'Please provide some value'
+
+	return {
+		isValid,
+		errorMessage
+	}
+}
+
 export const nameValidator = (name) => {
 	const isValid = validator.isLength(name, { min: 3 })
 	const errorMessage = isValid ? '' : 'Name too short'
