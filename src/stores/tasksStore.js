@@ -14,27 +14,48 @@ const setIsLoading = (isLoading) => {
 	})
 }
 
-const setTasksArray = (tasksArray) => {
-	tasksStore.update((tasksStoreObject) => {
-		return {
-			...tasksStoreObject,
-			tasksArray
-		}
-	})
-}
-
 const setInitialValue = async () => {
 	setIsLoading(true)
 
-	const response = await apis.tasksApi.getTasks()
+	const fetchTasksResponse = await apis.tasksApi.getTasks()
 
 	setIsLoading(false)
-	setTasksArray(response)
+
+	if (fetchTasksResponse.success) {
+		tasksStore.update((tasksStoreObject) => {
+			return {
+				...tasksStoreObject,
+				tasksArray: fetchTasksResponse.data
+			}
+		})
+	}
+}
+
+const addTask = async (description, isCompleted) => {
+	setIsLoading(true)
+
+	const addTaskResponse = await apis.tasksApi.createTasks(description, isCompleted)
+
+	setIsLoading(false)
+
+	if (addTaskResponse.success) {
+		tasksStore.update((tasksStoreObject) => {
+			let updatedTasksArray = tasksStoreObject.tasksArray
+
+			updatedTasksArray.push(addTaskResponse)
+
+			return {
+				...tasksStoreObject,
+				tasksArray: updatedTasksArray
+			}
+		})
+	}
 }
 
 const customTasksStore = {
 	subscribe: tasksStore.subscribe,
-	setInitialValue
+	setInitialValue,
+	addTask
 }
 
 export default customTasksStore

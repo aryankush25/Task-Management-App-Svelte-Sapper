@@ -14,7 +14,7 @@ const createTasks = async (description, completed) => {
 		}
 	)
 
-	return response.data
+	return response
 }
 
 const getTasks = async () => {
@@ -23,7 +23,7 @@ const getTasks = async () => {
 
 	const response = await request(url, method, { 'Content-Type': 'application/json' })
 
-	return response.data
+	return response
 }
 
 const getTask = async (taskId) => {
@@ -32,7 +32,7 @@ const getTask = async (taskId) => {
 
 	const response = await request(url, method, { 'Content-Type': 'application/json' })
 
-	return response.data
+	return response
 }
 
 const updateTask = async (taskId, updatedData) => {
@@ -41,7 +41,7 @@ const updateTask = async (taskId, updatedData) => {
 
 	const response = await request(url, method, { 'Content-Type': 'application/json' }, updatedData)
 
-	return response.data
+	return response
 }
 
 const deleteTask = async (taskId) => {
@@ -50,7 +50,7 @@ const deleteTask = async (taskId) => {
 
 	const response = await request(url, method, { 'Content-Type': 'application/json' })
 
-	return response.data
+	return response
 }
 
 const tasksApi = {

@@ -5,7 +5,7 @@
   import SharedCheckbox from "../shared/SharedCheckbox";
   import SharedButton from "../shared/SharedButton";
   import { emptyValidator } from "../../utils/validators.js";
-  import api from "../../services";
+  import tasksStore from "../../stores/tasksStore.js";
 
   const dispatch = createEventDispatcher();
 
@@ -18,12 +18,11 @@
     description = value;
   };
 
-  const closeModal = () => {
-    dispatch("close");
-  };
+  const closeModal = () => dispatch("close");
 
   const submit = () => {
-    api.tasksApi.createTasks(description, isCompleted);
+    tasksStore.addTask(description, isCompleted);
+    closeModal()
   };
 </script>
 
