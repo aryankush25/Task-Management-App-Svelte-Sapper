@@ -7,7 +7,7 @@
   import {isNilOrEmpty} from '../utils/helper.js'
 
   let isLoading = false;
-  let tasksArray;
+  let tasksArray = [];
   let isAddingTask = false;
   let unsubscribe;
 
@@ -46,7 +46,7 @@
   <svelte:component this={AddTask} on:close={toggelTaskAddModal} />
 {/if}
 
-{#if isLoading || isNilOrEmpty(tasksArray)}
+{#if isLoading}
   Loading...
 {:else}
   <SharedButton on:click={toggelTaskAddModal} label="Add Task" />

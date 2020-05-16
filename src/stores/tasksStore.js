@@ -32,17 +32,48 @@ const setInitialValue = async () => {
 }
 
 const addTask = async (description, isCompleted) => {
-	setIsLoading(true)
-
 	const addTaskResponse = await apis.tasksApi.createTasks(description, isCompleted)
-
-	setIsLoading(false)
 
 	if (addTaskResponse.success) {
 		tasksStore.update((tasksStoreObject) => {
 			let updatedTasksArray = tasksStoreObject.tasksArray
 
-			updatedTasksArray.push(addTaskResponse)
+			updatedTasksArray.push(addTaskResponse.data)
+
+			return {
+				...tasksStoreObject,
+				tasksArray: updatedTasksArray
+			}
+		})
+	}
+}
+
+const removeTask = async (id) => {
+	const deleteTaskResponse = await apis.tasksApi.deleteTask(id)
+
+	if (deleteTaskResponse.success) {
+		tasksStore.update((tasksStoreObject) => {
+			let updatedTasksArray = tasksStoreObject.tasksArray.filter((task) => task._id !== id)
+
+			return {
+				...tasksStoreObject,
+				tasksArray: updatedTasksArray
+			}
+		})
+	}
+}
+
+const updateTask = async (id, updatedData) => {
+	const updatedTaskResponse = await apis.tasksApi.updateTask(id, updatedData)
+
+	if (updatedTaskResponse.success) {
+		tasksStore.update((tasksStoreObject) => {
+			let updatedTasksArray = tasksStoreObject.tasksArray.map((task) => {
+				if (task._id === id) {
+					return updatedTaskResponse.data
+				}
+				return task
+			})
 
 			return {
 				...tasksStoreObject,
@@ -55,7 +86,9 @@ const addTask = async (description, isCompleted) => {
 const customTasksStore = {
 	subscribe: tasksStore.subscribe,
 	setInitialValue,
-	addTask
+	addTask,
+	removeTask,
+	updateTask
 }
 
 export default customTasksStore
