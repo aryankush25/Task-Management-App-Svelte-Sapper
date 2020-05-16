@@ -5,19 +5,19 @@ import { isNilOrEmpty } from '../../utils/helper'
 const BASE_URL = 'https://shielded-anchorage-68629.herokuapp.com/'
 
 const request = async (url, method, header, body, noAuth) => {
-	var myHeaders = new Headers()
+	var myHeaders = {}
 	const headerKeys = R.keys(header)
 
-	myHeaders.append('Accept', '*/*')
+	myHeaders = R.assoc('Accept', '*/*', myHeaders)
 
 	if (isNilOrEmpty(noAuth)) {
 		const { accessToken } = getLocalStorageTokens()
 
-		myHeaders.append('Authorization', `Bearer ${accessToken}`)
+		myHeaders = R.assoc('Authorization', `Bearer ${accessToken}`, myHeaders)
 	}
 
 	headerKeys.forEach((headerKey) => {
-		myHeaders.append(headerKey, header[headerKey])
+		myHeaders = R.assoc(headerKey, header[headerKey], myHeaders)
 	})
 
 	var raw = JSON.stringify(body)
