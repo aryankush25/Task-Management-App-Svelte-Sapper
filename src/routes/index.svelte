@@ -4,7 +4,7 @@
   import TaskCard from "../components/TaskCard";
   import SharedButton from "../components/shared/SharedButton";
   import AddTask from "../components/AddTask";
-  import {isNilOrEmpty} from '../utils/helper.js'
+  import { isNilOrEmpty } from "../utils/helper.js";
 
   let isLoading = false;
   let tasksArray = [];
@@ -49,7 +49,10 @@
 {#if isLoading}
   Loading...
 {:else}
-  <SharedButton on:click={toggelTaskAddModal} label="Add Task" />
+  <SharedButton
+    name="add-tasks"
+    on:click={toggelTaskAddModal}
+    label="Add Task" />
   <div>
     <div class="tasks-container">
       {#each tasksArray as task}

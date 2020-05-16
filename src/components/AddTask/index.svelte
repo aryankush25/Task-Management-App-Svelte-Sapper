@@ -22,7 +22,7 @@
 
   const submit = () => {
     tasksStore.addTask(description, isCompleted);
-    closeModal()
+    closeModal();
   };
 </script>
 
@@ -55,10 +55,13 @@
   <div slot="footer">
     <div class="save-task-buttons">
       <div class="save-task-button">
-        <SharedButton on:click={closeModal} label="Close" />
+        <SharedButton
+          name="close-task-modal"
+          on:click={closeModal}
+          label="Close" />
       </div>
       <div class="save-task-button">
-        <SharedButton on:click={submit} label="Submit" />
+        <SharedButton name="submit-task" on:click={submit} label="Submit" />
       </div>
     </div>
   </div>

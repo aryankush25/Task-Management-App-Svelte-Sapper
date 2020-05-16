@@ -1,8 +1,8 @@
 <script>
   export let name;
   export let label;
-  export let isDisabled;
-  export let isLoading;
+  export let isDisabled = false;
+  export let isLoading = false;
 
   $: disabled = isDisabled || isLoading;
 </script>

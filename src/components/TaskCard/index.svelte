@@ -1,7 +1,7 @@
 <script>
   import moment from "moment";
   import SharedButton from "../shared/SharedButton";
-  import tasksStore from '../../stores/tasksStore.js'
+  import tasksStore from "../../stores/tasksStore.js";
 
   export let task;
 
@@ -12,7 +12,7 @@
   const handleTaskDelete = () => {
     const currentTaskId = task._id;
 
-    tasksStore.removeTask(currentTaskId)
+    tasksStore.removeTask(currentTaskId);
   };
 </script>
 
@@ -33,9 +33,6 @@
   <div>Created At - {getFormattedDate(task.createdAt)}</div>
   <div>Updated At - {getFormattedDate(task.updatedAt)}</div>
 
-  <SharedButton
-    label="Delete"
-    name="delete-task"
-    on:click={handleTaskDelete} />
+  <SharedButton label="Delete" name="delete-task" on:click={handleTaskDelete} />
 
 </div>
