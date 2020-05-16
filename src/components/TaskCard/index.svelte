@@ -135,5 +135,4 @@
       name="delete-task"
       on:click={handleTaskDelete} />
   </div>
-
 </div>
