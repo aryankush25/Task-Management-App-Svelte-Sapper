@@ -3,6 +3,7 @@
   import tasksStore from "../stores/tasksStore.js";
   import TaskCard from "../components/TaskCard";
   import SharedButton from "../components/shared/SharedButton";
+  import Loader from "../components/shared/Loader";
   import AddTask from "../components/AddTask";
   import { isNilOrEmpty } from "../utils/helper.js";
 
@@ -47,17 +48,15 @@
 {/if}
 
 {#if isLoading}
-  Loading...
-{:else}
-  <SharedButton
-    name="add-tasks"
-    on:click={toggelTaskAddModal}
-    label="Add Task" />
-  <div>
-    <div class="tasks-container">
-      {#each tasksArray as task}
-        <TaskCard {task} />
-      {/each}
-    </div>
-  </div>
+  <Loader />
 {/if}
+
+<SharedButton name="add-tasks" on:click={toggelTaskAddModal} label="Add Task" />
+
+<div>
+  <div class="tasks-container">
+    {#each tasksArray as task}
+      <TaskCard {task} />
+    {/each}
+  </div>
+</div>
