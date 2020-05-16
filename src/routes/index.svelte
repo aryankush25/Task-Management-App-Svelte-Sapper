@@ -1,24 +1,27 @@
 <script>
-  import { onMount } from "svelte";
-  import apis from "../services";
+  import { onMount, onDestroy } from "svelte";
+  import tasksStore from "../stores/tasksStore.js";
   import TaskCard from "../components/TaskCard";
   import SharedButton from "../components/shared/SharedButton";
   import AddTask from "../components/AddTask";
+  import {isNilOrEmpty} from '../utils/helper.js'
 
   let isLoading = false;
-  let tasksArray = [];
+  let tasksArray;
   let isAddingTask = false;
-
-  const fetchTasks = async () => {
-    isLoading = true;
-    const response = await apis.tasksApi.getTasks();
-    tasksArray = response;
-
-    isLoading = false;
-  };
+  let unsubscribe;
 
   onMount(() => {
-    fetchTasks();
+    unsubscribe = tasksStore.subscribe(tasksStoreObject => {
+      tasksArray = tasksStoreObject.tasksArray;
+      isLoading = tasksStoreObject.isLoading;
+    });
+
+    tasksStore.setInitialValue();
+  });
+
+  onDestroy(() => {
+    if (unsubscribe) unsubscribe();
   });
 
   const toggelTaskAddModal = () => {
@@ -43,7 +46,7 @@
   <svelte:component this={AddTask} on:close={toggelTaskAddModal} />
 {/if}
 
-{#if isLoading}
+{#if isLoading || isNilOrEmpty(tasksArray)}
   Loading...
 {:else}
   <SharedButton on:click={toggelTaskAddModal} label="Add Task" />
