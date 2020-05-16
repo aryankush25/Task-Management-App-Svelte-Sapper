@@ -14,6 +14,10 @@
     box-shadow: 2px 6px 6px;
     z-index: 10;
   }
+
+  header h1 {
+    margin: 0;
+  }
 </style>
 
 <header>
