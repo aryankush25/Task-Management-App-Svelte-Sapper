@@ -4,6 +4,7 @@
   import { isTokensPresentLocalStorage } from "../services/utils/helper.js";
   import { goto } from "@sapper/app";
   import api from "../services";
+  import Header from "../components/Header";
 
   export let segment;
 
@@ -25,14 +26,25 @@
   };
 
   $: fetchAuthGuard(path);
+
+  $: showHeader = !R.includes(path, unProtectedRoutes);
 </script>
 
 <style>
   main {
     font-family: monospace;
   }
+
+  .height-top {
+    margin-top: 4rem;
+    height: calc(100vh - 4rem);
+  }
 </style>
 
-<main>
+{#if showHeader}
+  <Header />
+{/if}
+
+<main class:height-top={showHeader}>
   <slot />
 </main>
