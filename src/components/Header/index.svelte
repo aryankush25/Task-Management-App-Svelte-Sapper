@@ -21,5 +21,5 @@
 </style>
 
 <header>
-  <h1>Task Management</h1>
+  <h1>Task Manager</h1>
 </header>

@@ -17,6 +17,8 @@
 
   const submit = () => {
     tasksStore.addTask(description, isCompleted);
+    description = "";
+    isCompleted = false;
   };
 
   const handleCompletedValueChange = () => {
