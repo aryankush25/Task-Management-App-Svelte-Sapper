@@ -2,7 +2,6 @@
   import { fly } from "svelte/transition";
   import moment from "moment";
   import SharedButton from "../shared/SharedButton";
-  import CheckboxRound from "../shared/CheckboxRound";
   import TaskCardContainer from "../../containers/TaskCardContainer";
   import { emptyValidator } from "../../utils/validators.js";
 

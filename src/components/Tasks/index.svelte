@@ -1,7 +1,7 @@
 <script>
   import { scale } from "svelte/transition";
   import { flip } from "svelte/animate";
-
+  import AddTask from "../AddTask";
   import TaskCard from "../TaskCard";
 
   export let tasksArray;
@@ -17,6 +17,8 @@
 </style>
 
 <div class="tasks-container">
+  <AddTask />
+
   {#each tasksArray as task (task._id)}
     <div transition:scale animate:flip={{ duration: 300 }}>
       <TaskCard {task} />

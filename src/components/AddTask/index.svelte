@@ -1,68 +1,48 @@
 <script>
-  import { createEventDispatcher } from "svelte";
-  import Modal from "../shared/Modal";
-  import SharedInput from "../shared/SharedInput";
-  import SharedCheckbox from "../shared/SharedCheckbox";
+  import { fly } from "svelte/transition";
   import SharedButton from "../shared/SharedButton";
+  import TaskCardContainer from "../../containers/TaskCardContainer";
   import { emptyValidator } from "../../utils/validators.js";
   import tasksStore from "../../stores/tasksStore.js";
-
-  const dispatch = createEventDispatcher();
 
   let description = "";
   let isCompleted = false;
 
   $: validDescription = emptyValidator(description);
+  $: isSaveButtonDisabled = !validDescription.isValid;
 
   const onChangeDescription = ({ value }) => {
     description = value;
   };
 
-  const closeModal = () => dispatch("close");
-
   const submit = () => {
     tasksStore.addTask(description, isCompleted);
-    closeModal();
+  };
+
+  const handleCompletedValueChange = () => {
+    isCompleted = !isCompleted;
   };
 </script>
 
 <style>
-  .save-task-buttons {
-    display: flex;
-  }
-
-  .save-task-button {
-    margin: 0 5px;
+  .card-heading {
+    font-size: 28px;
+    font-weight: bold;
   }
 </style>
 
-<Modal title="Add Tasks" on:close>
-  <div>
-    <SharedInput
-      type="description"
-      name="description"
-      label="Description"
-      value={description}
-      onChange={onChangeDescription}
-      placeholder="Enter Description"
-      error={validDescription.errorMessage} />
+<TaskCardContainer
+  checkBoxId="add-task-checkbox"
+  isChecked={isCompleted}
+  bind:description
+  handleCheckboxValueChange={handleCompletedValueChange}>
 
-    <SharedCheckbox
-      name="completed"
-      bind:checked={isCompleted}
-      label="Completed ?" />
-  </div>
-  <div slot="footer">
-    <div class="save-task-buttons">
-      <div class="save-task-button">
-        <SharedButton
-          name="close-task-modal"
-          on:click={closeModal}
-          label="Close" />
-      </div>
-      <div class="save-task-button">
-        <SharedButton name="submit-task" on:click={submit} label="Submit" />
-      </div>
-    </div>
-  </div>
-</Modal>
+  <div slot="header" class="card-heading">Add Task</div>
+
+  <SharedButton
+    label="Save"
+    name="save-description"
+    isDisabled={isSaveButtonDisabled}
+    on:click={submit} />
+
+</TaskCardContainer>

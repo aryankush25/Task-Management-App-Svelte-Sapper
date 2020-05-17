@@ -16,6 +16,7 @@
     padding: 10px;
     margin: 20px;
     color: black;
+    min-width: 372px;
   }
 
   .card-header {
