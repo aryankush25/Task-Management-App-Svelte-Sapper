@@ -1,5 +1,5 @@
 import * as R from 'ramda'
-import { getLocalStorageTokens } from '../utils/helper'
+import { getLocalStorageTokens, clearLocalStorage } from '../utils/helper'
 import { isNilOrEmpty } from '../../utils/helper'
 
 const BASE_URL = 'https://shielded-anchorage-68629.herokuapp.com/'
@@ -34,6 +34,11 @@ const request = async (url, method, header, body, noAuth) => {
 
 			if (response.ok) {
 				return response.json()
+			}
+
+			if (response.status === 401) {
+				clearLocalStorage()
+				window.location.replace('/login')
 			}
 
 			throw new Error({
