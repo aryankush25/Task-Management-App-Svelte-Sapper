@@ -121,7 +121,7 @@
 
   <div class="task-actions-buttons">
     {#if !isSaveButtonDisabled}
-      <div transition:fly={{ x: 100 }} class="save-button-container">
+      <div transition:fly={{ x: -100 }} class="save-button-container">
         <SharedButton
           label="Save"
           name="save-description"
