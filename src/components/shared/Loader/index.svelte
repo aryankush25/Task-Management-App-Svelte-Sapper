@@ -1,3 +1,7 @@
+<script>
+  import { fade } from "svelte/transition";
+</script>
+
 <style>
   .loader-backdrop {
     position: fixed;
@@ -77,7 +81,7 @@
   }
 </style>
 
-<div class="loader-backdrop">
+<div transition:fade class="loader-backdrop">
   <div class="loader-container">
     <div class="loader">Loading...</div>
   </div>
