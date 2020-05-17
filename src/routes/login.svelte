@@ -19,6 +19,7 @@
 
   const onChangeEmail = event => {
     const { value } = event;
+
     email = value;
   };
 
