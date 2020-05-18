@@ -54,6 +54,16 @@
       await goto("/login");
     }
   };
+
+  const handleUserAccountDelete = async () => {
+    isLoading = true;
+    const response = await api.userApis.deleteMyAccount();
+    isLoading = false;
+
+    if (response.success) {
+      await goto("/login");
+    }
+  };
 </script>
 
 <style>
@@ -116,6 +126,11 @@
     <div class="user-image-container">
       {#if avatarUrl}
         <img transition:scale src={avatarUrl} alt="user-image" />
+      {:else}
+        <img
+          transition:scale
+          src={'/images/user-avatar.png'}
+          alt="user-image" />
       {/if}
     </div>
 
@@ -133,9 +148,20 @@
       </h5>
     </div>
 
+    <!-- <div class="buttons-container">
+      <SharedButton
+        name="deleteAccount"
+        label="Delete My Account"
+        on:click={handleUserAccountDelete} />
+      <SharedButton
+        name="editData"
+        label="Edit My Info"
+        on:click={() => console.log('Edit')} />
+    </div> -->
+
     <div class="buttons-container">
       <SharedButton
-        name="logout"
+        name="logoutAll"
         label="Logout from all devices"
         on:click={handleUserLogoutAllDevices} />
       <SharedButton

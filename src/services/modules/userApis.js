@@ -100,13 +100,23 @@ const getMyAvatar = async () => {
 	return response
 }
 
+const deleteMyAccount = async () => {
+	const url = 'user/me'
+	const method = 'DELETE'
+
+	const response = await request(url, method, { 'Content-Type': 'application/json' })
+
+	return response
+}
+
 const userApis = {
 	loginUserApi,
 	registerUserApi,
 	logoutCurrentUser,
 	logoutAllUser,
 	getCurrentUserApi,
-	getMyAvatar
+	getMyAvatar,
+	deleteMyAccount
 }
 
 export default userApis
