@@ -9,10 +9,11 @@
     color: #fff;
     height: 4rem;
     display: flex;
-    justify-content: center;
     align-items: center;
     box-shadow: 2px 6px 6px;
     z-index: 10;
+    padding: 0 30px;
+    box-sizing: border-box;
   }
 
   header h1 {
