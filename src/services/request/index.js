@@ -30,9 +30,15 @@ const request = async (url, method, header, body, noAuth) => {
 
 	const response = fetch(BASE_URL + url, requestOptions)
 		.then((response) => {
+			const contentType = response.headers.get('content-type')
+
 			// console.info(`Response of ${url}`, response)
 
 			if (response.ok) {
+				if (R.includes('image/png', `${contentType}`)) {
+					return response.blob()
+				}
+
 				return response.json()
 			}
 
@@ -48,6 +54,13 @@ const request = async (url, method, header, body, noAuth) => {
 		})
 		.then((result) => {
 			// console.info(`Result of ${url}`, result)
+
+			if (result instanceof Blob) {
+				return {
+					success: true,
+					data: URL.createObjectURL(result)
+				}
+			}
 
 			return {
 				success: true,

@@ -1,3 +1,22 @@
+<script>
+  import { onMount } from "svelte";
+  import { scale } from "svelte/transition";
+  import api from "../../services";
+  import { isPresent } from "../../utils/helper.js";
+
+  let imageUrl = "";
+
+  const fetchInitialData = async () => {
+    const response = await api.userApis.getMyAvatar();
+
+    imageUrl = response.data;
+  };
+
+  onMount(() => {
+    fetchInitialData();
+  });
+</script>
+
 <style>
   header {
     position: fixed;
@@ -19,8 +38,31 @@
   header h1 {
     margin: 0;
   }
+
+  .header-heading-container {
+    flex: 1;
+    text-align: left;
+  }
+
+  .header-avtart-container {
+    height: 50px;
+    width: 50px;
+  }
+
+  .header-avtart-container img {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+  }
 </style>
 
 <header>
-  <h1>Task Manager</h1>
+  <div class="header-heading-container">
+    <h1>Task Manager</h1>
+  </div>
+  {#if isPresent(imageUrl)}
+    <div transition:scale class="header-avtart-container">
+      <img src={imageUrl} alt="user-image" />
+    </div>
+  {/if}
 </header>

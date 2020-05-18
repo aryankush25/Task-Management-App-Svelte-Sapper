@@ -65,10 +65,20 @@ const getCurrentUserApi = async () => {
 	return response
 }
 
+const getMyAvatar = async () => {
+	const url = 'user/me/avatar'
+	const method = 'GET'
+
+	const response = await request(url, method, { 'Content-Type': 'application/json' })
+
+	return response
+}
+
 const userApis = {
 	loginUserApi,
 	registerUserApi,
-	getCurrentUserApi
+	getCurrentUserApi,
+	getMyAvatar
 }
 
 export default userApis
