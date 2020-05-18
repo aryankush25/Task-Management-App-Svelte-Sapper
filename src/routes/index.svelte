@@ -1,6 +1,6 @@
 <script>
   import { onMount, onDestroy } from "svelte";
-  import TodoListContainer from "../containers/TodoListContainer";
+  import AppContainer from "../containers/AppContainer";
   import Loader from "../components/shared/Loader";
   import Tasks from "../components/Tasks";
   import tasksStore from "../stores/tasksStore.js";
@@ -27,7 +27,7 @@
   <title>Task Management App</title>
 </svelte:head>
 
-<TodoListContainer>
+<AppContainer>
 
   {#if isLoading}
     <svelte:component this={Loader} />
@@ -35,4 +35,4 @@
 
   <Tasks {tasksArray} />
 
-</TodoListContainer>
+</AppContainer>
