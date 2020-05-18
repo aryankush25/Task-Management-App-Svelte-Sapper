@@ -42,7 +42,7 @@
 </style>
 
 {#if showHeader}
-  <Header />
+  <Header showProfile={path !== '/profile'} />
 {/if}
 
 <main class:height-top={showHeader}>

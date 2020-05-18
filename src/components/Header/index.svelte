@@ -1,28 +1,7 @@
 <script>
-  import { onMount, onDestroy } from "svelte";
-  import { scale } from "svelte/transition";
-  import userStore from "../../stores/userStore.js";
-  import { isPresent } from "../../utils/helper.js";
+  import UserAvatar from "../shared/UserAvatar";
 
-  let avatarUrl = "";
-  let unsubscribe = null;
-
-  onMount(() => {
-    unsubscribe = userStore.subscribe(userData => {
-      const { avatar } = userData;
-
-      avatarUrl = avatar;
-    });
-
-    if (!userStore.isUserDataPresent()) {
-      userStore.fetchAvatar();
-      userStore.fetchUserData();
-    }
-  });
-
-  onDestroy(() => {
-    if (unsubscribe) unsubscribe();
-  });
+  export let showProfile = false;
 </script>
 
 <style>
@@ -43,36 +22,26 @@
     box-sizing: border-box;
   }
 
-  header h1 {
-    margin: 0;
-  }
-
   .header-heading-container {
     flex: 1;
     text-align: left;
   }
 
-  .header-avtart-container {
-    height: 50px;
-    width: 50px;
-    cursor: pointer;
+  .header-heading-container h1 {
+    margin: 0;
   }
-
-  .header-avtart-container img {
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
+  .header-heading-container a {
+    text-decoration: none;
   }
 </style>
 
 <header>
   <div class="header-heading-container">
-    <h1>Task Manager</h1>
-
+    <a href="/">
+      <h1>Task Manager</h1>
+    </a>
   </div>
-  {#if isPresent(avatarUrl)}
-    <div transition:scale class="header-avtart-container">
-      <img src={avatarUrl} alt="user-image" />
-    </div>
+  {#if showProfile}
+    <UserAvatar />
   {/if}
 </header>

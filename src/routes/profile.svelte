@@ -3,16 +3,23 @@
   import { scale } from "svelte/transition";
   import userStore from "../stores/userStore.js";
   import AppContainer from "../containers/AppContainer";
+  import Loader from "../components/shared/Loader";
   import { isPresent } from "../utils/helper.js";
 
+  let isLoading = false;
+  let name = "";
+  let email = "";
+  let age = "";
   let avatarUrl = "";
   let unsubscribe = null;
 
   onMount(() => {
     unsubscribe = userStore.subscribe(userData => {
-      const { avatar } = userData;
-
-      avatarUrl = avatar;
+      isLoading = userData.isLoading;
+      name = userData.name;
+      email = userData.email;
+      age = userData.age;
+      avatarUrl = userData.avatar;
     });
 
     if (!userStore.isUserDataPresent()) {
@@ -36,6 +43,15 @@
 
 <AppContainer>
 
+  {#if isLoading}
+    <svelte:component this={Loader} />
+  {/if}
+
+  <img src={avatarUrl} alt="user-image" />
+
   <div>Profile</div>
+  <div>{name}</div>
+  <div>{email}</div>
+  <div>{age}</div>
 
 </AppContainer>
