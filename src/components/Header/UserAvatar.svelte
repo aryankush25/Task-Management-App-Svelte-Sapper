@@ -1,8 +1,8 @@
 <script>
   import { scale } from "svelte/transition";
   import { onMount, onDestroy } from "svelte";
-  import { isPresent } from "../../../utils/helper.js";
-  import userStore from "../../../stores/userStore.js";
+  import { isPresent } from "../../utils/helper.js";
+  import userStore from "../../stores/userStore.js";
 
   let avatarUrl = "";
   let unsubscribe = null;

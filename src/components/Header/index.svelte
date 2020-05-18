@@ -1,5 +1,5 @@
 <script>
-  import UserAvatar from "../shared/UserAvatar";
+  import UserAvatar from "./UserAvatar";
 
   export let showProfile = false;
 </script>
@@ -23,6 +23,7 @@
   }
 
   .header-heading-container {
+    display: flex;
     flex: 1;
     text-align: left;
   }
