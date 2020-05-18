@@ -16,9 +16,9 @@
       const isProtectedRouted = !R.includes(route, unProtectedRoutes);
 
       if (isLoggedIn && !isProtectedRouted) {
-        await goto("/");
+        if (window) await goto("/");
       } else if (!isLoggedIn && isProtectedRouted) {
-        await goto("/login");
+        if (window) await goto("/login");
       }
     } catch (error) {
       console.log("Error", error);

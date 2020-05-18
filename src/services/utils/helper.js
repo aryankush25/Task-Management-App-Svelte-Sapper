@@ -6,12 +6,15 @@ export const setLocalStorageTokens = (tokens) => {
 
 	keys.forEach((key) => {
 		const value = tokens[`${key}`]
-		window.localStorage.setItem(key, value)
+		if (window) window.localStorage.setItem(key, value)
 	})
 }
 
 export const getLocalStorageTokens = () => {
-	const accessToken = window.localStorage.getItem('accessToken') || ''
+	let accessToken = null
+	if (window) {
+		accessToken = window.localStorage.getItem('accessToken') || ''
+	}
 
 	return {
 		accessToken
@@ -27,5 +30,5 @@ export const isTokensPresentLocalStorage = () => {
 }
 
 export const clearLocalStorage = () => {
-	localStorage.clear()
+	if (window) window.localStorage.clear()
 }
