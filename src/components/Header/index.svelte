@@ -1,19 +1,27 @@
 <script>
-  import { onMount } from "svelte";
+  import { onMount, onDestroy } from "svelte";
   import { scale } from "svelte/transition";
-  import api from "../../services";
+  import userStore from "../../stores/userStore.js";
   import { isPresent } from "../../utils/helper.js";
 
-  let imageUrl = "";
-
-  const fetchInitialData = async () => {
-    const response = await api.userApis.getMyAvatar();
-
-    imageUrl = response.data;
-  };
+  let avatarUrl = "";
+  let unsubscribe = null;
 
   onMount(() => {
-    fetchInitialData();
+    unsubscribe = userStore.subscribe(userData => {
+      const { avatar } = userData;
+
+      avatarUrl = avatar;
+    });
+
+    if (!userStore.isUserDataPresent()) {
+      userStore.fetchAvatar();
+      userStore.fetchUserData();
+    }
+  });
+
+  onDestroy(() => {
+    if (unsubscribe) unsubscribe();
   });
 </script>
 
@@ -47,6 +55,7 @@
   .header-avtart-container {
     height: 50px;
     width: 50px;
+    cursor: pointer;
   }
 
   .header-avtart-container img {
@@ -59,10 +68,11 @@
 <header>
   <div class="header-heading-container">
     <h1>Task Manager</h1>
+
   </div>
-  {#if isPresent(imageUrl)}
+  {#if isPresent(avatarUrl)}
     <div transition:scale class="header-avtart-container">
-      <img src={imageUrl} alt="user-image" />
+      <img src={avatarUrl} alt="user-image" />
     </div>
   {/if}
 </header>
