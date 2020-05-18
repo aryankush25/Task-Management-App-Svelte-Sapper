@@ -1,7 +1,7 @@
 import * as R from 'ramda'
 import request from '../request'
 import { isPresent } from '../../utils/helper'
-import { setLocalStorageTokens } from '../utils/helper'
+import { setLocalStorageTokens, clearLocalStorage } from '../utils/helper'
 
 const loginUserApi = async (email, password) => {
 	const url = 'users/login'
@@ -56,6 +56,19 @@ const registerUserApi = async (name, email, password) => {
 	return response
 }
 
+const logoutCurrentUser = async () => {
+	const url = 'users/logout'
+	const method = 'POST'
+
+	const response = await request(url, method, { 'Content-Type': 'application/json' })
+
+	if (response.success) {
+		clearLocalStorage()
+	}
+
+	return response
+}
+
 const getCurrentUserApi = async () => {
 	const url = 'users/me'
 	const method = 'GET'
@@ -77,6 +90,7 @@ const getMyAvatar = async () => {
 const userApis = {
 	loginUserApi,
 	registerUserApi,
+	logoutCurrentUser,
 	getCurrentUserApi,
 	getMyAvatar
 }

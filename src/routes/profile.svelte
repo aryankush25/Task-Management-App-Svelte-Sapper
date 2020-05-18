@@ -1,9 +1,13 @@
 <script>
   import { onMount, onDestroy } from "svelte";
+  import { goto } from "@sapper/app";
   import { scale } from "svelte/transition";
   import userStore from "../stores/userStore.js";
   import AppContainer from "../containers/AppContainer";
   import Loader from "../components/shared/Loader";
+  import SharedButton from "../components/shared/SharedButton";
+  import api from "../services";
+
   import { isPresent } from "../utils/helper.js";
 
   let isLoading = false;
@@ -31,10 +35,21 @@
   onDestroy(() => {
     if (unsubscribe) unsubscribe();
   });
+
+  const handleUserLogout = async () => {
+    isLoading = true;
+    const response = await api.userApis.logoutCurrentUser();
+    isLoading = false;
+
+    if (response.success) {
+      await goto("/login");
+    }
+  };
 </script>
 
 <style>
-
+  .user-profile-container {
+  }
 </style>
 
 <svelte:head>
@@ -47,11 +62,14 @@
     <svelte:component this={Loader} />
   {/if}
 
-  <img src={avatarUrl} alt="user-image" />
+  <div class="user-profile-container">
+    <img src={avatarUrl} alt="user-image" />
 
-  <div>Profile</div>
-  <div>{name}</div>
-  <div>{email}</div>
-  <div>{age}</div>
+    <div>Name - {name}</div>
+    <div>Email - {email}</div>
+    <div>Age - {age}</div>
+
+    <SharedButton name="logout" label="Logout" on:click={handleUserLogout} />
+  </div>
 
 </AppContainer>

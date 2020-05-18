@@ -33,13 +33,16 @@ const request = async (url, method, header, body, noAuth) => {
 			const contentType = response.headers.get('content-type')
 
 			// console.info(`Response of ${url}`, response)
+			// console.info(`contentType of ${url}`, contentType)
 
 			if (response.ok) {
 				if (R.includes('image/png', `${contentType}`)) {
 					return response.blob()
+				} else if (R.includes('application/json', `${contentType}`)) {
+					return response.json()
 				}
 
-				return response.json()
+				return response.text()
 			}
 
 			if (response.status === 401) {
