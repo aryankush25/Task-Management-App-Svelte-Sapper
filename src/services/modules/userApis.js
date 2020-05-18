@@ -69,6 +69,19 @@ const logoutCurrentUser = async () => {
 	return response
 }
 
+const logoutAllUser = async () => {
+	const url = 'users/logoutAll'
+	const method = 'POST'
+
+	const response = await request(url, method, { 'Content-Type': 'application/json' })
+
+	if (response.success) {
+		clearLocalStorage()
+	}
+
+	return response
+}
+
 const getCurrentUserApi = async () => {
 	const url = 'users/me'
 	const method = 'GET'
@@ -91,6 +104,7 @@ const userApis = {
 	loginUserApi,
 	registerUserApi,
 	logoutCurrentUser,
+	logoutAllUser,
 	getCurrentUserApi,
 	getMyAvatar
 }

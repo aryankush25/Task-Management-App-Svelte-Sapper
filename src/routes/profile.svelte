@@ -7,8 +7,7 @@
   import Loader from "../components/shared/Loader";
   import SharedButton from "../components/shared/SharedButton";
   import api from "../services";
-
-  import { isPresent } from "../utils/helper.js";
+  import { isPresent, isNilOrEmpty } from "../utils/helper.js";
 
   let isLoading = false;
   let name = "";
@@ -36,9 +35,19 @@
     if (unsubscribe) unsubscribe();
   });
 
-  const handleUserLogout = async () => {
+  const handleUserLogoutCurrentDevice = async () => {
     isLoading = true;
     const response = await api.userApis.logoutCurrentUser();
+    isLoading = false;
+
+    if (response.success) {
+      await goto("/login");
+    }
+  };
+
+  const handleUserLogoutAllDevices = async () => {
+    isLoading = true;
+    const response = await api.userApis.logoutAllUser();
     isLoading = false;
 
     if (response.success) {
@@ -49,6 +58,47 @@
 
 <style>
   .user-profile-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+    margin: auto;
+    background: #fff;
+    box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+    padding: 20px;
+  }
+
+  .user-image-container {
+    max-width: 250px;
+    max-height: 250px;
+    min-width: 250px;
+    min-height: 250px;
+    margin: 20px 0;
+  }
+
+  .user-image-container img {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  }
+
+  .name-container {
+    margin-top: 20px;
+  }
+
+  .age-container {
+    margin-top: 10px;
+  }
+
+  .buttons-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 40px;
   }
 </style>
 
@@ -63,13 +113,37 @@
   {/if}
 
   <div class="user-profile-container">
-    <img src={avatarUrl} alt="user-image" />
+    <div class="user-image-container">
+      {#if avatarUrl}
+        <img transition:scale src={avatarUrl} alt="user-image" />
+      {/if}
+    </div>
 
-    <div>Name - {name}</div>
-    <div>Email - {email}</div>
-    <div>Age - {age}</div>
+    <div class="name-container">
+      <h1>{name || 'User Name'}</h1>
+    </div>
+    <div class="email-container">
+      <h3>{email || 'User Email'}</h3>
+    </div>
+    <div class="age-container">
+      <h5>
+        {#if isNilOrEmpty(age) || age === 0}
+          Please specify your age using edit option
+        {:else}{age} years old{/if}
+      </h5>
+    </div>
 
-    <SharedButton name="logout" label="Logout" on:click={handleUserLogout} />
+    <div class="buttons-container">
+      <SharedButton
+        name="logout"
+        label="Logout from all devices"
+        on:click={handleUserLogoutAllDevices} />
+      <SharedButton
+        name="logout"
+        label="Logout from current device"
+        on:click={handleUserLogoutCurrentDevice} />
+    </div>
+
   </div>
 
 </AppContainer>
