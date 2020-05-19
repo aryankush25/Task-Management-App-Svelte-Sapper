@@ -41,10 +41,6 @@
 
 <a href="/profile">
   <div transition:scale class="header-avtart-container">
-    {#if isPresent(avatarUrl)}
-      <img src={avatarUrl} alt="user-image" />
-    {:else}
-      <img src={'/images/user-avatar.png'} alt="user-image" />
-    {/if}
+    <img src={avatarUrl || '/images/user-avatar.png'} alt="user-image" />
   </div>
 </a>

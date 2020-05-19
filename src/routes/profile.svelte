@@ -124,14 +124,10 @@
 
   <div class="user-profile-container">
     <div class="user-image-container">
-      {#if avatarUrl}
-        <img transition:scale src={avatarUrl} alt="user-image" />
-      {:else}
-        <img
-          transition:scale
-          src={'/images/user-avatar.png'}
-          alt="user-image" />
-      {/if}
+      <img
+        transition:scale
+        src={avatarUrl || '/images/user-avatar.png'}
+        alt="user-image" />
     </div>
 
     <div class="name-container">
