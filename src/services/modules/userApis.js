@@ -100,6 +100,27 @@ const getMyAvatar = async () => {
 	return response
 }
 
+const deleteMyAvatar = async () => {
+	const url = 'user/me/avatar'
+	const method = 'DELETE'
+
+	const response = await request(url, method, { 'Content-Type': 'application/json' })
+
+	return response
+}
+
+const uploadMyAvatar = async (fileInput) => {
+	const url = 'user/me/avatar'
+	const method = 'POST'
+
+	var formdata = new FormData()
+	formdata.append('avatar', fileInput.files[0], 'Aryan.jpg')
+
+	const response = await request(url, method, { 'Content-Type': 'application/json' }, formdata)
+
+	return response
+}
+
 const deleteMyAccount = async () => {
 	const url = 'user/me'
 	const method = 'DELETE'
@@ -116,6 +137,8 @@ const userApis = {
 	logoutAllUser,
 	getCurrentUserApi,
 	getMyAvatar,
+	deleteMyAvatar,
+	uploadMyAvatar,
 	deleteMyAccount
 }
 
