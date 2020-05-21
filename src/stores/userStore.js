@@ -100,7 +100,7 @@ const updateUserData = async (userName, userAge) => {
 }
 
 const updateAvatar = async (avatarUrl) => {
-	const uploadMyAvatarResponse = await api.userApis.uploadMyAvatar(avatarUrl, 'User')
+	const uploadMyAvatarResponse = await api.userApis.uploadMyAvatar(avatarUrl, avatarUrl.name)
 
 	if (uploadMyAvatarResponse.success) {
 		userStore.update((userStoreObject) => {

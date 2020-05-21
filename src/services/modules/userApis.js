@@ -125,7 +125,7 @@ const uploadMyAvatar = async (fileInput, name) => {
 	var formdata = new FormData()
 	formdata.append('avatar', fileInput, name)
 
-	const response = await request(url, method, { 'Content-Type': 'application/json' }, formdata)
+	const response = await request(url, method, {}, formdata)
 
 	return response
 }

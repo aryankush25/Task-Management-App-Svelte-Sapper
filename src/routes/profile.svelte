@@ -23,9 +23,6 @@
   $: newUserAge = age;
   $: newUserAvatar = avatarUrl;
 
-  $: console.log("$$$$ avatarUrl", avatarUrl);
-  $: console.log("$$$$ newUserAvatar", newUserAvatar);
-
   $: newUserNameValidator = nameValidator(newUserName || "");
   $: newUserAgeValidator = ageValidator(newUserAge || 0);
 
