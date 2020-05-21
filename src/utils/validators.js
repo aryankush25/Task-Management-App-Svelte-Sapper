@@ -20,6 +20,16 @@ export const nameValidator = (name) => {
 	}
 }
 
+export const ageValidator = (age) => {
+	const isValid = validator.isInt(`${age}`, { min: 1, max: 150 })
+	const errorMessage = isValid ? '' : 'Enter valid age'
+
+	return {
+		isValid,
+		errorMessage
+	}
+}
+
 export const emailValidator = (email) => {
 	const isValid = validator.isEmail(email)
 	const errorMessage = isValid ? '' : 'Not a valid email'

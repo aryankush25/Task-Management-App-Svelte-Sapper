@@ -78,11 +78,61 @@ const fetchUserData = async () => {
 	}
 }
 
+const updateUserData = async (userName, userAge) => {
+	setIsLoading(true)
+
+	const userDataResponse = await api.userApis.setCurrentUserApi(userName, userAge)
+
+	setIsLoading(false)
+
+	if (userDataResponse.success) {
+		const { age, email, name } = userDataResponse.data
+
+		userStore.update((userStoreObject) => {
+			return {
+				...userStoreObject,
+				age,
+				email,
+				name
+			}
+		})
+	}
+}
+
+const updateAvatar = async (avatarUrl) => {
+	const uploadMyAvatarResponse = await api.userApis.uploadMyAvatar(avatarUrl, 'User')
+
+	if (uploadMyAvatarResponse.success) {
+		userStore.update((userStoreObject) => {
+			return {
+				...userStoreObject,
+				avatar: URL.createObjectURL(avatarUrl)
+			}
+		})
+	}
+}
+
+const deleteAvatar = async () => {
+	const deleteMyAvatarResponse = await api.userApis.deleteMyAvatar()
+
+	if (deleteMyAvatarResponse.success) {
+		userStore.update((userStoreObject) => {
+			return {
+				...userStoreObject,
+				avatar: null
+			}
+		})
+	}
+}
+
 const customUserStore = {
 	subscribe: userStore.subscribe,
 	isUserDataPresent,
 	fetchAvatar,
-	fetchUserData
+	fetchUserData,
+	updateUserData,
+	updateAvatar,
+	deleteAvatar
 }
 
 export default customUserStore

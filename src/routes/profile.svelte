@@ -6,15 +6,28 @@
   import AppContainer from "../containers/AppContainer";
   import Loader from "../components/shared/Loader";
   import SharedButton from "../components/shared/SharedButton";
+  import SharedInput from "../components/shared/SharedInput";
   import api from "../services";
   import { isPresent, isNilOrEmpty } from "../utils/helper.js";
+  import { nameValidator, ageValidator } from "../utils/validators.js";
 
+  let isEditingModeOn = false;
   let isLoading = false;
   let name = "";
   let email = "";
   let age = "";
-  let avatarUrl = "";
+  let avatarUrl = null;
   let unsubscribe = null;
+
+  $: newUserName = name;
+  $: newUserAge = age;
+  $: newUserAvatar = avatarUrl;
+
+  $: console.log("$$$$ avatarUrl", avatarUrl);
+  $: console.log("$$$$ newUserAvatar", newUserAvatar);
+
+  $: newUserNameValidator = nameValidator(newUserName || "");
+  $: newUserAgeValidator = ageValidator(newUserAge || 0);
 
   onMount(() => {
     unsubscribe = userStore.subscribe(userData => {
@@ -55,15 +68,46 @@
     }
   };
 
-  const handleUserAccountDelete = async () => {
-    isLoading = true;
-    const response = await api.userApis.deleteMyAccount();
-    isLoading = false;
-
-    if (response.success) {
-      await goto("/login");
+  const handleUserAvatarActionClick = () => {
+    if (isPresent(newUserAvatar)) {
+      newUserAvatar = "";
+    } else {
+      const inputButtonRef = document.getElementById("user-avatar-input");
+      inputButtonRef.click();
     }
   };
+
+  const handelImageDataLoad = event => {
+    const file = event.target.files[0] || {};
+
+    newUserAvatar = file;
+  };
+
+  const handleSaveUserInfo = () => {
+    userStore.updateUserData(newUserName, newUserAge);
+
+    if (!(isNilOrEmpty(newUserAvatar) && isNilOrEmpty(avatarUrl))) {
+      if (isNilOrEmpty(newUserAvatar)) {
+        userStore.deleteAvatar();
+      } else {
+        userStore.updateAvatar(newUserAvatar);
+      }
+    }
+
+    isEditingModeOn = !isEditingModeOn;
+  };
+
+  const handleNameChange = ({ value }) => (newUserName = value);
+
+  const handleAgeChange = ({ value }) => (newUserAge = value);
+
+  $: newUserAgeUrl = (newUserAvatar && newUserAvatar instanceof File) ? URL.createObjectURL(newUserAvatar) : newUserAvatar
+
+  $: isSaveButtonDisabled =
+    (newUserName === name &&
+      newUserAge === age &&
+      newUserAvatar === avatarUrl) ||
+    (!newUserNameValidator.isValid || !newUserAgeValidator.isValid);
 </script>
 
 <style>
@@ -86,13 +130,35 @@
     min-width: 250px;
     min-height: 250px;
     margin: 20px 0;
+    position: relative;
   }
 
-  .user-image-container img {
+  .user-avatar {
     width: 100%;
     height: 100%;
+    max-width: 250px;
+    max-height: 250px;
     border-radius: 10px;
     box-shadow: 0px 15px 16.83px 0.17px rgba(0, 0, 0, 0.05);
+  }
+
+  .user-avatar-action-container {
+    position: absolute;
+    height: 25px;
+    width: 25px;
+    background: #fe2851;
+    top: -10px;
+    right: -10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .user-avatar-action {
+    height: 16px;
+    width: 16px;
   }
 
   .name-container {
@@ -110,6 +176,41 @@
     width: 100%;
     margin-top: 40px;
   }
+
+  .profile-screen-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+  }
+
+  .edit-button-container {
+    height: 30px;
+    width: 30px;
+    background: #fe2851;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  }
+
+  .edit-button {
+    height: 20px;
+    width: 20px;
+  }
+
+  .actions-buttons-container {
+    justify-content: flex-end;
+  }
+
+  .margin-left-20 {
+    margin-left: 20px;
+  }
+
+  #user-avatar-input {
+    display: none;
+  }
 </style>
 
 <svelte:head>
@@ -123,49 +224,110 @@
   {/if}
 
   <div class="user-profile-container">
+    {#if !isEditingModeOn}
+      <div class="profile-screen-header">
+        <div
+          class="edit-button-container"
+          on:click={() => (isEditingModeOn = !isEditingModeOn)}>
+          <img
+            class="edit-button"
+            src="/images/edit-pencil.png"
+            alt="edit-button" />
+        </div>
+      </div>
+    {/if}
+
     <div class="user-image-container">
+      {#if isEditingModeOn}
+        <div
+          class="user-avatar-action-container"
+          on:click={handleUserAvatarActionClick}>
+          <input
+            id="user-avatar-input"
+            type="file"
+            accept={['image/png', 'image/jpeg']}
+            on:change={handelImageDataLoad} />
+          <img
+            class="user-avatar-action"
+            src={newUserAvatar ? '/images/trash-white.png' : '/images/upload-white.png'}
+            alt="user-avatar-action" />
+        </div>
+      {/if}
+
       <img
+        class="user-avatar"
         transition:scale
-        src={avatarUrl || '/images/user-avatar.png'}
+        src={(isEditingModeOn ? newUserAgeUrl : avatarUrl) || '/images/user-avatar.png'}
         alt="user-image" />
     </div>
 
     <div class="name-container">
-      <h1>{name || 'User Name'}</h1>
+      {#if isEditingModeOn}
+        <SharedInput
+          type="text"
+          name="userName"
+          placeholder="Enter Name"
+          label="Name"
+          value={newUserName}
+          error={newUserNameValidator.errorMessage}
+          onChange={handleNameChange} />
+      {:else}
+        <h1>{name || 'User Name'}</h1>
+      {/if}
     </div>
-    <div class="email-container">
-      <h3>{email || 'User Email'}</h3>
-    </div>
+    {#if !isEditingModeOn}
+      <div class="email-container">
+        <h3>{email || 'User Email'}</h3>
+      </div>
+    {/if}
+
     <div class="age-container">
-      <h5>
-        {#if isNilOrEmpty(age) || age === 0}
-          Please specify your age using edit option
-        {:else}{age} years old{/if}
-      </h5>
+
+      {#if isEditingModeOn}
+        <SharedInput
+          type="number"
+          name="userAge"
+          placeholder="Enter Age"
+          label="Age"
+          value={newUserAge}
+          error={newUserAgeValidator.errorMessage}
+          onChange={handleAgeChange} />
+      {:else}
+        <h5>
+          {#if isNilOrEmpty(age) || age === 0}
+            Please specify your age using edit option
+          {:else}{age} years old{/if}
+        </h5>
+      {/if}
+
     </div>
 
-    <!-- <div class="buttons-container">
-      <SharedButton
-        name="deleteAccount"
-        label="Delete My Account"
-        on:click={handleUserAccountDelete} />
-      <SharedButton
-        name="editData"
-        label="Edit My Info"
-        on:click={() => console.log('Edit')} />
-    </div> -->
+    {#if !isEditingModeOn}
+      <div class="buttons-container">
+        <SharedButton
+          name="logoutAll"
+          label="Logout from all devices"
+          on:click={handleUserLogoutAllDevices} />
 
-    <div class="buttons-container">
-      <SharedButton
-        name="logoutAll"
-        label="Logout from all devices"
-        on:click={handleUserLogoutAllDevices} />
-      <SharedButton
-        name="logout"
-        label="Logout from current device"
-        on:click={handleUserLogoutCurrentDevice} />
-    </div>
-
+        <SharedButton
+          name="logout"
+          label="Logout from current device"
+          on:click={handleUserLogoutCurrentDevice} />
+      </div>
+    {:else}
+      <div class="buttons-container actions-buttons-container">
+        <SharedButton
+          name="cancel"
+          label="Cancel"
+          on:click={() => (isEditingModeOn = !isEditingModeOn)} />
+        <div class="margin-left-20">
+          <SharedButton
+            name="save"
+            label="Save"
+            isDisabled={isSaveButtonDisabled}
+            on:click={handleSaveUserInfo} />
+        </div>
+      </div>
+    {/if}
   </div>
-
 </AppContainer>
