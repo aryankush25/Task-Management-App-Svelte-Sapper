@@ -1,22 +1,50 @@
 <script>
-	import Nav from '../components/Nav.svelte';
+  import * as R from "ramda";
+  import { unProtectedRoutes } from "../utils/helper.js";
+  import { isTokensPresentLocalStorage } from "../services/utils/helper.js";
+  import { goto } from "@sapper/app";
+  import api from "../services";
+  import Header from "../components/Header";
 
-	export let segment;
+  export let segment;
+
+  $: path = segment ? `/${segment}` : "/";
+
+  const fetchAuthGuard = async route => {
+    try {
+      const isLoggedIn = isTokensPresentLocalStorage();
+      const isProtectedRouted = !R.includes(route, unProtectedRoutes);
+
+      if (isLoggedIn && !isProtectedRouted) {
+        if (window) await goto("/");
+      } else if (!isLoggedIn && isProtectedRouted) {
+        if (window) await goto("/login");
+      }
+    } catch (error) {
+      console.log("Error", error);
+    }
+  };
+
+  $: fetchAuthGuard(path);
+
+  $: showHeader = !R.includes(path, unProtectedRoutes);
 </script>
 
 <style>
-	main {
-		position: relative;
-		max-width: 56em;
-		background-color: white;
-		padding: 2em;
-		margin: 0 auto;
-		box-sizing: border-box;
-	}
+  main {
+    font-family: monospace;
+  }
+
+  .height-top {
+    margin-top: 4rem;
+    height: calc(100vh - 4rem);
+  }
 </style>
 
-<Nav {segment}/>
+{#if showHeader}
+  <Header showProfile={path !== '/profile'} />
+{/if}
 
-<main>
-	<slot></slot>
+<main class:height-top={showHeader}>
+  <slot />
 </main>

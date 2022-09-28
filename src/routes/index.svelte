@@ -1,46 +1,38 @@
-<style>
-	h1, figure, p {
-		text-align: center;
-		margin: 0 auto;
-	}
+<script>
+  import { onMount, onDestroy } from "svelte";
+  import AppContainer from "../containers/AppContainer";
+  import Loader from "../components/shared/Loader";
+  import Tasks from "../components/Tasks";
+  import tasksStore from "../stores/tasksStore.js";
 
-	h1 {
-		font-size: 2.8em;
-		text-transform: uppercase;
-		font-weight: 700;
-		margin: 0 0 0.5em 0;
-	}
+  let isLoading = false;
+  let tasksArray = [];
+  let unsubscribe;
 
-	figure {
-		margin: 0 0 1em 0;
-	}
+  onMount(() => {
+    unsubscribe = tasksStore.subscribe(tasksStoreObject => {
+      tasksArray = tasksStoreObject.tasksArray;
+      isLoading = tasksStoreObject.isLoading;
+    });
 
-	img {
-		width: 100%;
-		max-width: 400px;
-		margin: 0 0 1em 0;
-	}
+    tasksStore.setInitialValue();
+  });
 
-	p {
-		margin: 1em auto;
-	}
-
-	@media (min-width: 480px) {
-		h1 {
-			font-size: 4em;
-		}
-	}
-</style>
+  onDestroy(() => {
+    if (unsubscribe) unsubscribe();
+  });
+</script>
 
 <svelte:head>
-	<title>Sapper project template</title>
+  <title>Task Management App</title>
 </svelte:head>
 
-<h1>Great success!</h1>
+<AppContainer>
 
-<figure>
-	<img alt='Borat' src='great-success.png'>
-	<figcaption>HIGH FIVE!</figcaption>
-</figure>
+  {#if isLoading}
+    <svelte:component this={Loader} />
+  {/if}
 
-<p><strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong></p>
+  <Tasks {tasksArray} />
+
+</AppContainer>
